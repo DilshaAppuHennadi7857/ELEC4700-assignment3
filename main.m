@@ -2,7 +2,7 @@
 %
 % Dilsha Appu-Hennadi, 101107857
 % Mar. 20, 2022
-% Latest rev. Mar. 7, 2022
+% Latest rev. Apr. 17, 2022
 
 clear all
 clearvars
@@ -10,9 +10,9 @@ clearvars -GLOBAL
 close all
 format shorte
 
-global regL regW  nx ny L W
+global regL regW  nx ny L W dl dw
 
-regL = 100e-9; % length of area
+regL = 200e-9; % length of area
 regW = 100e-9; % width of area
 
 nx = 50; % number of space in x direction
@@ -21,6 +21,9 @@ ny = 50; % number of spaces in y direction
 L = linspace(0, regL, nx); % nx spaces from 0 to region length
 W = linspace(0, regW, ny); % ny spaces from 0 to region width
 
+dl = regL/nx;
+dw = regW/ny;
+
 q = 1.60217662e-19; %C % elementary charge
 m_e = 9.10938356e-31; %kg % rest mass of an electron
 m_n = 0.26*m_e; %kg % mass of an electron
@@ -28,17 +31,17 @@ kb = 1.38064852e-23; %m^2 kg s^-2 K^-1 % Boltzmann's Constant
 
 T = 300; %K % temperature
 
-numElec = 500;%50;
+numElec = 1000; %500;%50;
 numDispElec = 5;
 t_mn = 0.2e-12; %s % mean time between collisions
 
-numTimeStep = 800; %50;
+numTimeStep = 1000; %800; %50;
 dt = 1e-16;
 
 
-% V_0 = 0.1; %V
+V_0 = 0.1; %V
 % V_0 = 0.8; %V
-V_0 = 1; %V
+% V_0 = 1; %V
 
 Cols = hsv(numDispElec);
 
@@ -108,4 +111,18 @@ ylabel('Current')
 % two boxes widens - current increases. This intuitively makes sense as the
 % two boxes represent areas of higher resistivitivy. These areas would
 % impede current flow, thus decreasing the current through the device.
+%
+
+%% Next Steps
+%
+% One way to make the situation more accurate would be to use different
+% shapes randomly distributed randomly through out the region to simulate
+% the effect of randomly distributed dopants into the material.
+% Additionally, this would mean that the main silicon and dopant would have
+% their own conductivities.
+%
+% Another way to make the simulation more accurate could be adding electron
+% interactions. If electrons get within a certain distance to each other
+% then the should repel each other.
+%
 %

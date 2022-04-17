@@ -187,8 +187,8 @@ yPos = regW.*rand(1,numElec); % set random initial y position
 %
 for i = 1:numElec
     while ((xPos(i)>=(boxLeft*regL)) && (xPos(i)<=(boxRight*regL))) && (((yPos(i)>=(boxBottom*regW)) || (yPos(i)<=(boxTop*regW))))
-        xPos(i) = nx.*rand; % set random initial x position
-        yPos(i) = ny.*rand; % set random initial y position
+        xPos(i) = regL.*rand; % set random initial x position
+        yPos(i) = regW.*rand; % set random initial y position
     end
 end
 

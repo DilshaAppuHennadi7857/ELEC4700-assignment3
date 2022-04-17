@@ -85,20 +85,20 @@ for i = 1:nx
         
         % Calculate Ex
         if i == 1
-            Ex(i,j) = Vmap(i+1,j) - Vmap(i,j);
+            Ex(i,j) = (Vmap(i+1,j) - Vmap(i,j))/dl;
         elseif i == nx
-            Ex(i,j) = Vmap(i,j) - Vmap(i-1,j);
+            Ex(i,j) = (Vmap(i,j) - Vmap(i-1,j))/dl;
         else
-            Ex(i,j) = (Vmap(i+1,j) - Vmap(i-1,j)) / 2.0;
+            Ex(i,j) = (Vmap(i+1,j) - Vmap(i-1,j)) / dl;
         end
         
         % Calculate Ey
         if j == 1
-            Ey(i,j) = Vmap(i,j+1) - Vmap(i,j);
+            Ey(i,j) = (Vmap(i,j+1) - Vmap(i,j))/dw;
         elseif j == ny
-            Ey(i,j) = Vmap(i,j) - Vmap(i,j-1);
+            Ey(i,j) = (Vmap(i,j) - Vmap(i,j-1))/dw;
         else
-            Ey(i,j) = (Vmap(i,j+1) - Vmap(i,j-1)) / 2.0;
+            Ey(i,j) = (Vmap(i,j+1) - Vmap(i,j-1)) / dw;
         end
         
     end
@@ -160,8 +160,8 @@ avgFy = mean(Fy, 'all');
 xPos = regL*rand(1,numElec);
 yPos = regW*rand(1,numElec);
 
-xVel = sqrt(3*kb * T/m_n)*randn(1,numElec);
-yVel = sqrt(3*kb * T/m_n)*randn(1,numElec);
+xVel = sqrt(2*kb * T/m_n)*randn(1,numElec);
+yVel = sqrt(2*kb * T/m_n)*randn(1,numElec);
 
 %%
 %
@@ -186,7 +186,7 @@ Pscat = 1 - exp(-dt/t_mn); % Probability of scattering
 % carrier concentration of $ 10^{15}cm^{-2} $
 %
 
-carrierCon = 10e15; %cm^-2
+carrierCon = 1e15; %cm^-2
 
 index = 1;
 
@@ -210,8 +210,8 @@ for t = 1:numTimeStep
     
     randNum = rand(1, numElec); % generate a random number for each electron
     scatter = randNum < Pscat; % determine if electron scatters
-    xVel(scatter) = sqrt(3*kb * T/m_n)*randn;
-    yVel(scatter) = sqrt(3*kb * T/m_n)*randn;
+    xVel(scatter) = sqrt(2*kb * T/m_n)*randn;
+    yVel(scatter) = sqrt(2*kb * T/m_n)*randn;
     
     xVel = accel*dt + xVel;
     yVel = accel*dt + yVel;
@@ -305,11 +305,10 @@ title('Density Plot')
 % Plot temperature map
 % use final velocities of electrons
 
-E_k = m_n .* (sqrt(xVel.^2 + yVel.^2).^2) ./ 2;
-Temp = (2.*E_k)./(3*kb);
-avgTemp = mean(Temp);
+xyAvgVel = mean(sqrt(xVel.^2 + yVel.^2));
+Temp = (xyAvgVel^2)*(C.m_n/(2*C.kb));
 
-tempMap = densityPlot.*avgTemp;
+tempMap = densityPlot.*Temp;
 tempMap = tempMap';
 
 figure(6)
